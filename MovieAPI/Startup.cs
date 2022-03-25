@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MovieAPI.Data;
+using MovieAPI.Repositories;
+using MovieAPI.Repositories.Adress;
 using System;
 
 namespace MovieAPI
@@ -22,7 +24,10 @@ namespace MovieAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MovieContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("MovieConnection")));
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IMovieTheaterRepository, MovieTheaterRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddDbContext<AppDbContext>(opts => opts.UseMySQL(Configuration.GetConnectionString("MovieConnection")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

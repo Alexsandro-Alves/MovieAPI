@@ -9,8 +9,8 @@ using MovieAPI.Data;
 namespace MovieAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220319151457_Add_Table_Movie")]
-    partial class Add_Table_Movie
+    [Migration("20220322234229_Add_Table_MovieTheater")]
+    partial class Add_Table_MovieTheater
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,6 +18,30 @@ namespace MovieAPI.Migrations
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.5");
+
+            modelBuilder.Entity("MovieAPI.Entities.MovieTheater", b =>
+                {
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MovieTheaters");
+                });
 
             modelBuilder.Entity("MovieAPI.Models.Movie", b =>
                 {

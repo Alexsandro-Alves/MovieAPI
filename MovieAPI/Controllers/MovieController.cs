@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using MovieAPI.Data;
 using MovieAPI.Models;
 using MovieAPI.Models.Response;
+using MovieAPI.Repositories;
 using System;
-using System.Linq;
 
 namespace MovieAPI.Controllers
 {
@@ -12,12 +11,12 @@ namespace MovieAPI.Controllers
     [Route("[controller]")]
     public class MovieController : ControllerBase
     {
-        private MovieContext _context;
+        private IMovieRepository _movieRepository;
         private IMapper _mapper;
 
-        public MovieController(MovieContext context, IMapper mapper)
+        public MovieController(IMovieRepository movieRepository, IMapper mapper)
         {
-            _context = context;
+            _movieRepository = movieRepository;
             _mapper = mapper;
         }
 
@@ -26,21 +25,21 @@ namespace MovieAPI.Controllers
         {
             Movie movie = _mapper.Map<Movie>(movieModel);
 
-            _context.Movies.Add(movie);
-            _context.SaveChanges();
+            _movieRepository.Create(movie);
+            _movieRepository.Save();
             return CreatedAtAction(nameof(GetMovieById), new { Id = movie.Id }, movie);
         }
 
         [HttpGet]
         public IActionResult GetAllMovies()
         {
-            return Ok(_context.Movies);
+            return Ok(_movieRepository.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetMovieById(Guid id)
         {
-            var movie = _context.Movies.FirstOrDefault(movie => movie.Id == id);
+            var movie = _movieRepository.GetById(id);
             if (movie != null)
             {
                 MovieResponseModel movieRequestModel = _mapper.Map<MovieResponseModel>(movie);
@@ -52,9 +51,9 @@ namespace MovieAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateMovie(Guid id, [FromBody] MovieRequestModel movieModel)
+        public IActionResult UpdateMovie(Guid id, [FromBody] UpdateMovieRequestModel movieModel)
         {
-            var movie = _context.Movies.FirstOrDefault(movie => movie.Id == id);
+            var movie = _movieRepository.GetById(id);
 
             if (movie == null)
             {
@@ -62,7 +61,7 @@ namespace MovieAPI.Controllers
             }
 
             _mapper.Map(movieModel, movie);
-            _context.SaveChanges();
+            _movieRepository.Save();
 
             return NoContent();
         }

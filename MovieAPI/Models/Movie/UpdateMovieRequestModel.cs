@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MovieAPI.Models.Response
+namespace MovieAPI.Models
 {
-    public class MovieResponseModel
+    public class UpdateMovieRequestModel
     {
         [Required(ErrorMessage = "O titulo do filme deve ser informado")]
         public string Title { get; set; }
@@ -13,6 +12,5 @@ namespace MovieAPI.Models.Response
         public string Genre { get; set; }
         [Range(1, 600, ErrorMessage = "A duração deve ter no mínimo 1 e no máximo 600 minutos")]
         public int Duration { get; set; }
-        public DateTime HoraDaConsulta { get; set; }
     }
 }
