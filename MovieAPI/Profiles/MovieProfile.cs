@@ -10,6 +10,7 @@ namespace MovieAPI.Profiles
         {
             CreateMap<MovieRequestModel, Movie>();
             CreateMap<Movie, MovieResponseModel>();
+            CreateMap<UpdateMovieRequestModel, Movie>();
         }
     }
 }
