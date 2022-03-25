@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
+using MovieAPI.Validators;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieAPI.Models
 {
     public class Movie : BaseEntity
     {
-        [Required(ErrorMessage = "O titulo do filme deve ser informado")]
-        public string Title { get; set; }
-        [Required(ErrorMessage = "O diretor do filme deve ser informado")]
-        public string Director { get; set; }
-        [Required(ErrorMessage = "O genero do filme deve ser informado")]
-        public string Genre { get; set; }
-        [Range(1, 600, ErrorMessage = "A duração deve ter no mínimo 1 e no máximo 600 minutos")]
-        public int Duration { get; set; }
+        public string Title { get; protected set; }
+        public string Director { get; protected set; }
+        public string Genre { get; protected set; }
+        public int Duration { get; protected set; }
+
+        [NotMapped]
+        protected override IValidator Validator => new MovieValidator();
+        protected Movie() : base() { }
+
     }
 }
